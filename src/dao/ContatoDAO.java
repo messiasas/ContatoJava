@@ -52,10 +52,34 @@ public class ContatoDAO {
         return contatos;
     }
 
+    public void atualizar(Contato contato) throws SQLException{
+        String sql = "UPDATE contatos SET nome = ?, telefone = ?, email = ? WHERE id = ?";
+
+        try(Connection connection = ConexaoDB.getConnect();
+        PreparedStatement st = connection.prepareStatement(sql)){
+
+            st.setString(1, contato.getNome());
+            st.setString(2, contato.getTelefone());
+            st.setString(3, contato.getEmail());
+            st.setInt(4, contato.getId());
+
+            st.executeUpdate();
+        }
+    }
+
+    public void deletar(int id) throws SQLException{
+
+        String sql = "DELETE FROM contatos WHERE id = ?";
+
+        try(Connection con = ConexaoDB.getConnect();
+        PreparedStatement st = con.prepareStatement(sql)){
+
+            st.setInt(1, id);
+            st.executeUpdate();
+        }
+    }
+
 }
-
-
-
 
 
 
