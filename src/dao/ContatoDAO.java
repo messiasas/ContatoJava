@@ -45,10 +45,9 @@ public class ContatoDAO {
 
                 // Criando objeto contato que recebe os parametros
                 Contato contato = new Contato(id, nome, telefone, email);
-                contatos.add(contato); // <======= Lista contatos recebendo objetos Contato e armazenando
+                contatos.add(contato);
             }
         }
-        // Listando todos os contatos depois de adicionados em contatos.add(contato)
         return contatos;
     }
 
@@ -80,6 +79,13 @@ public class ContatoDAO {
     }
 
 }
+
+
+
+
+
+
+
 
 
 
