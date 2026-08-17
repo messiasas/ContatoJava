@@ -6,12 +6,21 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="mysql-connector-j-26.7.0" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../mysql-connector-j-26.7.0/mysql-connector-j-26.7.0.jar!/" />
+          <root url="jar://C:/mysql-connector-j-26.7.0/mysql-connector-j-26.7.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mysql-connector-j-26.7.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Users/mysql-connector-j-26.7.0/mysql-connector-j-26.7.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
