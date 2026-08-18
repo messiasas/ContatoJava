@@ -1,7 +1,11 @@
 package view;
 
+import dao.ContatoDAO;
+import model.Contato;
+
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 
 // JFrame é uma classe da biblioteca swing.
 public class TelaPrincipal extends JFrame {
@@ -15,8 +19,10 @@ public class TelaPrincipal extends JFrame {
     private JButton btnExcluir;
     private JButton btnLimpar;
 
-    public TelaPrincipal(){
+    private ContatoDAO dao;
 
+    public TelaPrincipal(){
+        dao = new ContatoDAO();
         // Como herdamos a herança, nós já temos os metodos sem precisar inicializar
 
         setTitle("Agenda de contatos");
@@ -45,6 +51,21 @@ public class TelaPrincipal extends JFrame {
         btnAtualizar = new JButton("Atualizar");
         btnExcluir = new JButton("Excluir");
         btnLimpar = new JButton("Limpar");
+
+        btnAdicionar.addActionListener(e ->{
+            String nome = campoNome.getText();
+            String telef = campoTelefone.getText();
+            String email = campoTelefone.getText();
+
+            Contato cont = new Contato(0,nome,telef,email);
+
+            try{
+                dao.inserir(cont);
+                JOptionPane.showMessageDialog(this,"Contato adicionado.");
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(this, "Erro ao adicionar: "+ex.getMessage());
+            }
+        });
 
         painelBtn.add(btnAdicionar);
         painelBtn.add(btnAtualizar);

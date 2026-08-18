@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-262.9437.185">
+  <component name="dataSourceStorageLocal" created-in="IU-262.8665.337">
     <data-source name="agenda_contatos@localhost" uuid="816f67f3-6604-4d87-b71c-275b1392f116">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" />
       <secret-storage>master_key</secret-storage>
