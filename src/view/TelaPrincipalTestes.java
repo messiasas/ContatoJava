@@ -1,58 +1,84 @@
 package view;
 
+import dao.ContatoDAO;
+
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
+
+import model.Contato;
 
 public class TelaPrincipalTestes extends JFrame {
 
-    private JTextField compNome;
-    private JTextField compTelef;
-    private JTextField compEmail;
+    private JTextField nomeCamp;
+    private JTextField telCamp;
+    private JTextField emailCamp;
 
-    private JButton btnAd;
-    private JButton btnAt;
-    private JButton btnDel;
-    private JButton btnLimp;
+    private JButton adBtn;
+    private JButton atBtn;
+    private JButton delBtn;
+    private JButton limpBtn;
+
+    ContatoDAO dao;
 
     public TelaPrincipalTestes(){
+
+        dao = new ContatoDAO();
+
         setTitle("Contatos");
-        setSize(400,400);
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel compFrame = new JPanel();
-        compFrame.setLayout(new GridLayout(3,2,5,5));
+        JPanel panelCamp = new JPanel();
+        panelCamp.setLayout(new GridLayout(3,2,5,5));
 
-        compFrame.add(new JLabel("Nome:"));
-        compNome = new JTextField();
-        compFrame.add(compNome);
+        panelCamp.add(new JLabel("Nome"));
+        nomeCamp = new JTextField();
+        panelCamp.add(nomeCamp);
 
-        compFrame.add(new JLabel("Telefone:"));
-        compTelef = new JTextField();
-        compFrame.add(compTelef);
+        panelCamp.add(new JLabel("Telefone"));
+        telCamp = new JTextField();
+        panelCamp.add(telCamp);
 
-        compFrame.add(new JLabel("Email:"));
-        compEmail = new JTextField();
-        compFrame.add(compEmail);
+        panelCamp.add(new JLabel("Email"));
+        emailCamp = new JTextField();
+        panelCamp.add(emailCamp);
 
-        JPanel rodaPe = new JPanel();
+        JPanel btnPanel = new JPanel();
 
-        btnAd = new JButton("Adicionar");
-        btnAt = new JButton("Atualizar");
-        btnDel = new JButton("Deletar");
-        btnLimp = new JButton("Limpar");
+        adBtn = new JButton("Adicionar");
+        atBtn = new JButton("Atualizar");
 
-        rodaPe.add(btnAd);
-        rodaPe.add(btnAt);
-        rodaPe.add(btnDel);
-        rodaPe.add(btnLimp);
+        delBtn = new JButton("Deletar");
+        limpBtn = new JButton("Limpar");
 
-        add(compFrame, BorderLayout.CENTER);
-        add(rodaPe, BorderLayout.SOUTH);
+        btnPanel.add(adBtn);
+        btnPanel.add(atBtn);
+        btnPanel.add(delBtn);
+        btnPanel.add(limpBtn);
+
+        add(panelCamp, BorderLayout.CENTER);
+        add(btnPanel, BorderLayout.SOUTH);
+
+        adBtn.addActionListener(e ->{
+            String nome = nomeCamp.getText();
+            String tel = telCamp.getText();
+            String email = emailCamp.getText();
+
+            Contato cont = new Contato(0,nome,tel,email);
+            try{
+                dao.inserir(cont);
+                JOptionPane.showMessageDialog(this,"Contato adicionado.");
+
+            }catch(SQLException s){
+                JOptionPane.showMessageDialog(this,"Erro ao adicionar "+s.getMessage());
+            }
+
+        });
     }
-
     public static void main(String[] args){
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() ->{
             TelaPrincipalTestes tela = new TelaPrincipalTestes();
             tela.setVisible(true);
         });

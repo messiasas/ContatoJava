@@ -4,6 +4,7 @@ import dao.ContatoDAO;
 import model.Contato;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
 
@@ -18,6 +19,9 @@ public class TelaPrincipal extends JFrame {
     private JButton btnAtualizar;
     private JButton btnExcluir;
     private JButton btnLimpar;
+
+    private JTable tabela;
+    private DefaultTableModel modeloTabela;
 
     private ContatoDAO dao;
 
