@@ -34,6 +34,22 @@ public class TelaPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        modeloTabela = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        modeloTabela.addColumn("ID");
+        modeloTabela.addColumn("Nome");
+        modeloTabela.addColumn("Telefone");
+        modeloTabela.addColumn("Email");
+
+        tabela = new JTable(modeloTabela);
+
+        JScrollPane scrollTabela = new JScrollPane(tabela);
+
         JPanel painelFormulario = new JPanel();
         painelFormulario.setLayout(new GridLayout(3, 2, 5, 5));
 
@@ -59,7 +75,7 @@ public class TelaPrincipal extends JFrame {
         btnAdicionar.addActionListener(e ->{
             String nome = campoNome.getText();
             String telef = campoTelefone.getText();
-            String email = campoTelefone.getText();
+            String email = campoEmail.getText();
 
             Contato cont = new Contato(0,nome,telef,email);
 
@@ -76,7 +92,8 @@ public class TelaPrincipal extends JFrame {
         painelBtn.add(btnExcluir);
         painelBtn.add(btnLimpar);
 
-        add(painelFormulario, BorderLayout.CENTER);
+        add(painelFormulario, BorderLayout.NORTH);
+        add(scrollTabela, BorderLayout.CENTER);
         add(painelBtn, BorderLayout.SOUTH);
     }
 
