@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
+import java.util.List;
 
 // JFrame é uma classe da biblioteca swing.
 public class TelaPrincipal extends JFrame {
@@ -25,6 +26,22 @@ public class TelaPrincipal extends JFrame {
 
     private ContatoDAO dao;
 
+    private int idSelecionado;
+
+    private void atualizarTabela(){
+        modeloTabela.setRowCount(0);
+
+        try{
+            List<Contato> contatos = dao.listarTodos();
+            for(Contato c: contatos){
+                Object[] linha = {c.getId(), c.getNome(), c.getTelefone(), c.getEmail()};
+                modeloTabela.addRow(linha);
+            }
+        }catch(SQLException sl){
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar: "+sl.getMessage());
+        }
+    }
+
     public TelaPrincipal(){
         dao = new ContatoDAO();
         // Como herdamos a herança, nós já temos os metodos sem precisar inicializar
@@ -33,6 +50,23 @@ public class TelaPrincipal extends JFrame {
         setSize(500,400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        JPanel painelFormulario = new JPanel();
+        painelFormulario.setLayout(new GridLayout(3, 2, 5, 5));
+
+        painelFormulario.add(new JLabel("Nome:"));
+        campoNome = new JTextField();
+        painelFormulario.add(campoNome);
+
+        painelFormulario.add(new JLabel("Telefone"));
+        campoTelefone = new JTextField();
+        painelFormulario.add(campoTelefone);
+
+        painelFormulario.add(new JLabel("Email:"));
+        campoEmail = new JTextField();
+        painelFormulario.add(campoEmail);
+
+        /* ================ Tabela contatos ================ */
 
         modeloTabela = new DefaultTableModel(){
             @Override
@@ -50,20 +84,21 @@ public class TelaPrincipal extends JFrame {
 
         JScrollPane scrollTabela = new JScrollPane(tabela);
 
-        JPanel painelFormulario = new JPanel();
-        painelFormulario.setLayout(new GridLayout(3, 2, 5, 5));
+        // Todo JTable tem um "modelo de seleção" (SelectionModel)
+        tabela.getSelectionModel().addListSelectionListener(e -> {
+            int linhaSelec = tabela.getSelectedRow();
 
-        painelFormulario.add(new JLabel("Nome:"));
-        campoNome = new JTextField();
-        painelFormulario.add(campoNome);
+            // Devolve o índice da linha atualmente selecionada (0, 1, 2...).
+            // Se nada estiver selecionado, devolve -1
+            if(linhaSelec >= 0){
+                idSelecionado = (int) modeloTabela.getValueAt(linhaSelec, 0); // linha x colunas
+                campoNome.setText((String) modeloTabela.getValueAt(linhaSelec, 1));
+                campoTelefone.setText((String) modeloTabela.getValueAt(linhaSelec,2));
+                campoEmail.setText((String) modeloTabela.getValueAt(linhaSelec,3)); // linha x colunas
+            }
+        });
 
-        painelFormulario.add(new JLabel("Telefone"));
-        campoTelefone = new JTextField();
-        painelFormulario.add(campoTelefone);
-
-        painelFormulario.add(new JLabel("Email:"));
-        campoEmail = new JTextField();
-        painelFormulario.add(campoEmail);
+        /* ================ Painel Botões ================ */
 
         JPanel painelBtn = new JPanel();
 
@@ -82,8 +117,25 @@ public class TelaPrincipal extends JFrame {
             try{
                 dao.inserir(cont);
                 JOptionPane.showMessageDialog(this,"Contato adicionado.");
+                atualizarTabela();
             }catch(SQLException ex){
                 JOptionPane.showMessageDialog(this, "Erro ao adicionar: "+ex.getMessage());
+            }
+        });
+
+        btnAtualizar.addActionListener(e -> {
+            String nome = campoNome.getText();
+            String telef = campoTelefone.getText();
+            String email = campoEmail.getText();
+
+            Contato contatoAt = new Contato(0,nome,telef,email);
+
+            try{
+                dao.atualizar(contatoAt);
+                JOptionPane.showMessageDialog(this, "Contato "+nome+" atualizado.");
+                atualizarTabela();
+            }catch(SQLException ss){
+                JOptionPane.showMessageDialog(this,"Falha ao atualizar dados"+ss.getMessage());
             }
         });
 
@@ -95,6 +147,8 @@ public class TelaPrincipal extends JFrame {
         add(painelFormulario, BorderLayout.NORTH);
         add(scrollTabela, BorderLayout.CENTER);
         add(painelBtn, BorderLayout.SOUTH);
+
+        atualizarTabela();
     }
 
     // O formato (() -> {}) é chamada "expressao lambda", uma forma mais compacta de escrever sem precisar criar classe separada
